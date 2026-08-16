@@ -30,3 +30,9 @@ jobs:
     
     - name: Unit test
       run : npm test
+
+    - name: Archieve Result
+      uses: actions/upload-artifact@v7
+      with:
+        name: artifact
+        path: test-artifact.xml
