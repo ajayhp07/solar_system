@@ -19,12 +19,12 @@ jobs:
     name: unit testing
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        operating_system: [ubuntu-latest, macos-latest]
         versions: [18, 20]
         exclude:
-          - os: macos-latest
+          - operating_system: macos-latest
             versions: 18
-    runs-on: ${{matrix.os}}
+    runs-on: ${{matrix.operating_system}}
     steps:
     - name: checkout Repository
       uses: actions/checkout@v4
@@ -34,6 +34,13 @@ jobs:
       with:
         node-version: ${{matrix.versions}}
     
+    - name: Cache npm dependences
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{runner.os}}-node_modules-${{ hashFiles('package-lock.json') }}
+      
+
     - name: Install Dependencies
       run: npm install
     
@@ -60,6 +67,12 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 18
+
+    - name: Cache npm dependences
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{runner.os}}-node_modules-${{ hashFiles('package-lock.json') }}
     
     - name: Install Dependencies
       run: npm install
