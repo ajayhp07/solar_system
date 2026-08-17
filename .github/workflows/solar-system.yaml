@@ -38,7 +38,7 @@ jobs:
       run: npm install
     
     - name: Unit test
-      id: nodejs-test
+      # id: nodejs-test
       run : npm test
 
     - name: Archieve Result
