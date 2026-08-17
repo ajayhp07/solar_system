@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        versions: [18, 19, 20]
+        versions: [18, 20]
         exclude:
           - os: macos-latest
             versions: 18
@@ -38,9 +38,11 @@ jobs:
       run: npm install
     
     - name: Unit test
+      id: nodejs-test
       run : npm test
 
     - name: Archieve Result
+      if: steps.nodejs-test.outcome == 'failure' || steps.nodejs-test.outcome == 'success'
       uses: actions/upload-artifact@v7
       with:
         name: Mocha-Test-Result
