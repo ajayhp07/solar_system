@@ -105,7 +105,7 @@ jobs:
         username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: docker builf for testing
+    - name: docker build for testing
       uses: docker/build-push-action@v6
       with:
         context: .                                    # Dockerfile kahan hai (root)
@@ -125,6 +125,13 @@ jobs:
 
         echo Testing Image URL using wget
         wget -q -O - 127.0.0.1:3000/live | grep live
+
+    - name: Publish docker image in dockerhub
+      uses: docker/build-push-action@v6
+      with:
+        context: .                                    # Dockerfile kahan hai (root)
+        push: true                                 # build ke baad push bhi karo and false for not push to hub
+        tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
 
 
