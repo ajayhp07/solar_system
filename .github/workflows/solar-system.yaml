@@ -92,7 +92,7 @@ jobs:
 
 
   docker:
-    name: Containeraize
+    name: Containeraize  
     needs: [ testing, code-coverage ]
     # PERMISSION DENA HOGA job level me GHCR ME PACAKGE JAHA TUMAHARA IMAGE JYEGA WARNA GITHUB TOKEN ERROR DEGA [DENIED KA ] . 
     # bydefault = read hota h , hame write bhi dena hoga 
