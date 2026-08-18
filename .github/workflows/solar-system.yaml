@@ -133,6 +133,29 @@ jobs:
         push: true                                 # build ke baad push bhi karo and false for not push to hub
         tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
+# ab wahi image ko hum  github container registry me add krnge {https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry}
+  GHCR:
+    name: Push image in GHCR
+    needs: [docker]
+    runs-on: ubuntu:latest
+    steps:
+    - name: Checkout repo.
+      uses: actions/checkout@v4
+
+    - name: Login to GHCR Hub
+      uses: docker/login-action@v4
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN}}
+    
+    - name: Push to GHCR
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        push: true
+        tags: ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
+
 
 
 
