@@ -99,7 +99,7 @@ jobs:
     # bydefault = read hota h , hame write bhi dena hoga 
     permissions:
       packages: write
-      id-token: write
+      id-token: write # yeh hamne ecr ke liye kiya h write
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo.
@@ -119,14 +119,16 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN}}
 
+# yeh hum ECR me bhi push krna chahte h 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
         aws-region: us-east-1
-    
+
+    # login to ecr
     - name: Login to Amazon ECR
-      id: ecr-login
+      id: ecr-login # login id kaam aayega output me put krne ke liye
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: docker build for testing
