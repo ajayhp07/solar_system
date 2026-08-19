@@ -118,7 +118,7 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN}}
-
+# Debug OIDC tOKEN
     - name: Debug OIDC Token
       run: |
         curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
