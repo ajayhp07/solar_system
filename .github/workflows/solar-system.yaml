@@ -151,7 +151,7 @@ jobs:
 
         echo Testing Image URL using wget
         wget -q -O - 127.0.0.1:3000/live | grep live
-
+# publish image 
     - name: Publish image in dockerhub and GHCR
       uses: docker/build-push-action@v6
       with:
