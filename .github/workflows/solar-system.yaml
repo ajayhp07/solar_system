@@ -15,7 +15,7 @@ env:
   MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
   DOCKERHUB_USERNAME: ${{vars.DOCKERHUB_USERNAME}}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-  AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+  AWS_ROLE_ARN: ${{ secrets.ROLE }}
   
 jobs:
   testing:
@@ -118,6 +118,7 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN}}
+
 # Debug OIDC tOKEN
     - name: Debug OIDC Token
       run: |
@@ -129,7 +130,7 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        role-to-assume: ${{ secrets.ROLE}}
         aws-region: us-east-1
 
     # login to ecr
