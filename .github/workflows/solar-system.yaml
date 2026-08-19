@@ -99,6 +99,7 @@ jobs:
     # bydefault = read hota h , hame write bhi dena hoga 
     permissions:
       packages: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo.
