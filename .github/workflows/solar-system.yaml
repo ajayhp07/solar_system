@@ -15,6 +15,7 @@ env:
   MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
   DOCKERHUB_USERNAME: ${{vars.DOCKERHUB_USERNAME}}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
   
 jobs:
   testing:
@@ -117,6 +118,16 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN}}
 
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: us-east-1
+    
+    - name: Login to Amazon ECR
+      id: ecr-login
+      uses: aws-actions/amazon-ecr-login@v2
+
     - name: docker build for testing
       uses: docker/build-push-action@v6
       with:
@@ -146,6 +157,7 @@ jobs:
         tags: | 
           ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
           ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
+          ${{ steps.ecr-login.outputs.registry }}/solar-system:${{ github.sha }}
 
 
 
