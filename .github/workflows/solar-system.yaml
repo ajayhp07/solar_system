@@ -30,6 +30,7 @@ jobs:
         env:
           MONGO_INITDB_ROOT_USERNAME: admin
           MONGO_INITDB_ROOT_PASSWORD: password
+          MONGO_INITDB_DATABASE: superData
         options: >-
           --health-cmd "mongosh --eval 'db.runCommand({ping: 1})'"
           --health-interval 5s
@@ -37,7 +38,7 @@ jobs:
           --health-retries 5
 
     env:
-      MONGO_URI: 'mongodb://localhost:27017/admin'
+      MONGO_URI: 'mongodb://localhost:27017/superData?authSource=admin'
       MONGO_USERNAME: admin
       MONGO_PASSWORD: password
 
