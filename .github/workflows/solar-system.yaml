@@ -20,6 +20,17 @@ env:
 jobs:
   testing:
     name: unit testing
+  # Adding service conatainer so that all tested happen in that db container instead of production database
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          - 27017:27017
+    env:
+      MONGO_URI : 'mongodb://localhost:27017/superData'
+      MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
+      MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
+
     strategy:
       matrix:
         operating_system: [ubuntu-latest] # Abhi ke liye macos-latest  hatta dete h ko
@@ -97,10 +108,12 @@ jobs:
     needs: [ testing, code-coverage ]
     # PERMISSION DENA HOGA job level me GHCR ME PACAKGE JAHA TUMAHARA IMAGE JYEGA WARNA GITHUB TOKEN ERROR DEGA [DENIED KA ] . 
     # bydefault = read hota h , hame write bhi dena hoga 
+
     permissions:
       contents: read
       packages: write
       id-token: write # yeh hamne ecr ke liye kiya h write
+
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo.
