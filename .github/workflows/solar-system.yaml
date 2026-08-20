@@ -27,15 +27,14 @@ jobs:
         image: mongo:6
         ports:
           - 27017:27017
-        env:                                              # ← YEH ADD KARO
-          MONGO_INITDB_ROOT_USERNAME: ${{ vars.MONGO_USERNAME }}
-          MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-          MONGO_INITDB_DATABASE: superData
+        env:
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: password
 
     env:
-      MONGO_URI: 'mongodb://localhost:27017/superData?authSource=admin'
-      MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
-      MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
+      MONGO_URI: 'mongodb://localhost:27017/admin'
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: password
 
     strategy:
       matrix:
