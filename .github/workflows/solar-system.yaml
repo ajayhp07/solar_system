@@ -223,6 +223,20 @@ jobs:
         echo "---------------------------------"
         kubectl get nodes
 
+    # Replace placeholder
+
+    - name: Replace Placeholders / Tokens
+      uses: cschleiden/replace-tokens@v1
+      with:
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+        files: '["Solar_system/kubernetes/development/*.yaml"]'
+      env:
+        NAMESPACE: ${{vars.NAMESPACE}}
+        K8S_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
+        REPLICAS: ${{vars.REPLICAS}}
+        # INGRESS_IP: 
+
 
 
 
