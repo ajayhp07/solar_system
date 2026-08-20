@@ -203,7 +203,21 @@ jobs:
           ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
           ${{ steps.ecr-login.outputs.registry }}/solar-system:${{ github.sha }}
 
+  dev-deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout Repository
+      uses: actions/checkout@v4
 
+    - name: Install k8s cli
+      uses: azure/setup-kubectl@v4
+    
+    - name: Checking k8s versions and nodes
+      run: |
+        kubectl version --short
+        echo -----------------
+        kubectl get nodes 
 
 
 
