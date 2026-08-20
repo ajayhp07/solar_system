@@ -20,7 +20,7 @@ env:
 jobs:
   testing:
     name: unit testing
-    
+
   # Adding service conatainer so that all tested happen in that db container instead of production database
     services:
       mongodb:
@@ -28,8 +28,8 @@ jobs:
         ports:
           - 27017:27017
         env:                                              # ← YEH ADD KARO
-          MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
-          MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
+          MONGO_INITDB_ROOT_USERNAME: ${{ vars.MONGO_USERNAME }}
+          MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
 
     env:
       MONGO_URI : 'mongodb://localhost:27017/superData'
