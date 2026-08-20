@@ -213,11 +213,15 @@ jobs:
     - name: Install k8s cli
       uses: azure/setup-kubectl@v4
     
+    # Instant free cluster inside GitHub runner
+    - name: Create k8s KinD Cluster
+      uses: helm/kind-action@v1.10.0
+
     - name: Checking k8s versions and nodes
       run: |
-        kubectl version --short
-        echo -----------------
-        kubectl get nodes 
+        kubectl version --client
+        echo "---------------------------------"
+        kubectl get nodes
 
 
 
