@@ -226,6 +226,9 @@ jobs:
         kubectl get nodes
 
     # Replace placeholder
+    - name: Save Ingress Controller IP as a GITHUB Environment Variable
+      run: |
+        echo "INGRESS_IP=${{ secrets.INGRESS_IP }}" >> $GITHUB_ENV
 
     - name: Replace Placeholders / Tokens
       uses: cschleiden/replace-tokens@v1
@@ -237,7 +240,11 @@ jobs:
         NAMESPACE: ${{vars.NAMESPACE}}
         K8S_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
         REPLICAS: ${{vars.REPLICAS}}
-        # INGRESS_IP: 
+        INGRESS_IP: ${{env.INGRESS_IP}}
+    
+    - name: Check the files
+      run: |
+        cat Solar_system/kubernetes/development/*.yaml
 
 
 
