@@ -233,9 +233,9 @@ jobs:
     - name: Replace Placeholders / Tokens
       uses: cschleiden/replace-tokens@v1
       with:
-        tokenPrefix: '#{'
-        tokenSuffix: '}#'
-        files: '["Solar_system/kubernetes/development/*.yaml"]'
+        tokenPrefix: '${'
+        tokenSuffix: '}'
+        files: '["kubernetes/development/*.yaml"]'
       env:
         NAMESPACE: ${{vars.NAMESPACE}}
         K8S_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
@@ -244,7 +244,7 @@ jobs:
     
     - name: Check the files
       run: |
-        cat Solar_system/kubernetes/development/*.yaml
+        cat kubernetes/development/*.yaml
 
 
 
