@@ -31,7 +31,7 @@ jobs:
       MONGO_URI: 'mongodb://localhost:27017/superData'
       MONGO_USERNAME: non-prod-user
       MONGO_PASSWORD: non-prod-password 
-      
+
     strategy:
       matrix:
         operating_system: [ubuntu-latest] # Abhi ke liye macos-latest  hatta dete h ko
@@ -73,15 +73,33 @@ jobs:
 
   code-coverage:
     name: CodeCoverage
+  #  https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/run-jobs-in-a-container
+  # https://docs.github.com/en/actions/tutorials/use-containerized-services/create-postgresql-service-containers#running-jobs-in-containers
+    container:
+      image: node:20
+
+    services:
+      mongodb:
+        image: siddharth67/mongo-db:non-prod
+      # here no need of ports because in one job two container {job and service }are running that means they can talk each other via default network we can use label
+        options: 
+          --name mongo
+        # ports:
+        #   - 27017:27017
+    env:
+      MONGO_URI: 'mongodb://mongo:27017/superData' # yeh label hum mongo yaha put krnge 
+      MONGO_USERNAME: non-prod-user
+      MONGO_PASSWORD: non-prod-password 
+
     runs-on: ubuntu-latest
     steps:
     - name: checkout Repository
       uses: actions/checkout@v4
 
-    - name: Nodejs setup
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
+    # - name: Nodejs setup
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: 18
 
     - name: Cache npm dependences
       uses: actions/cache@v4
