@@ -98,6 +98,7 @@ jobs:
     # PERMISSION DENA HOGA job level me GHCR ME PACAKGE JAHA TUMAHARA IMAGE JYEGA WARNA GITHUB TOKEN ERROR DEGA [DENIED KA ] . 
     # bydefault = read hota h , hame write bhi dena hoga 
     permissions:
+      contents: read
       packages: write
       id-token: write # yeh hamne ecr ke liye kiya h write
     runs-on: ubuntu-latest
