@@ -205,6 +205,10 @@ jobs:
 
   dev-deploy:
     needs: docker
+    # Github enviroment
+    environment: 
+      name: development
+      url: solar-system-${{ vars.NAMESPACE }}.${{ secrets.INGRESS_IP }}.nip.io
     runs-on: ubuntu-latest
     steps:
     - name: checkout Repository
