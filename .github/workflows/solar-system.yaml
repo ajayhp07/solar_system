@@ -207,6 +207,9 @@ jobs:
     if: contains(github.ref, 'feature/')
     needs: docker
     uses: ./.github/workflows/reuse-deployment.yaml
+    secrets:
+      mongo-uri: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+      mongodb:  ${{secrets.MONGO_PASSWORD}}
     #Agr hum reusable workflows krte h toh iss solar-system ko hum Caller bolte h aur reusable file ko Called.
     
   integration-testing:
