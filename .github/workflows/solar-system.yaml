@@ -10,7 +10,7 @@ on:
       - 'feature/*'
 
 env:
-  MONGO_URI : 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+  MONGO_URI : ${{secrets.MONGO_URI}}
   MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
   MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
   DOCKERHUB_USERNAME: ${{vars.DOCKERHUB_USERNAME}}
@@ -208,7 +208,7 @@ jobs:
     needs: docker
     uses: ./.github/workflows/reuse-deployment.yaml
     secrets:
-      mongo-uri: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+      mongo-uri: ${{secrets.MONGO_URI}}
       mongodb:  ${{secrets.MONGO_PASSWORD}}
     #Agr hum reusable workflows krte h toh iss solar-system ko hum Caller bolte h aur reusable file ko Called.
     
@@ -230,7 +230,7 @@ jobs:
     needs: docker
     uses: ./.github/workflows/reuse-deployment.yaml
     secrets:
-      mongo-uri: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+      mongo-uri: ${{secrets.MONGO_URI}}
       mongodb:  ${{secrets.MONGO_PASSWORD}}
     # Github enviroment
     # environment: 
