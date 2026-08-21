@@ -204,6 +204,7 @@ jobs:
           ${{ steps.ecr-login.outputs.registry }}/solar-system:${{ github.sha }}
 
   dev-deploy:
+    if: contains(github.ref, 'feature/')
     needs: docker
     # Github enviroment
     environment: 
@@ -274,6 +275,7 @@ jobs:
         echo "app_host=$HOST" >> $GITHUB_OUTPUT
 
   dev-integration-testing:
+    if: contains(github.ref, 'feature/')
     name: Dev Integration Testing
     needs: dev-deploy
     runs-on: ubuntu-latest
@@ -286,7 +288,8 @@ jobs:
           curl -s http://$URL/live | jq -r .status | grep -i live
   
   production-deploy:
-    needs: dev-integration-testing
+    if: github.ref == 'ref/heads/main'
+    needs: docker
     # Github enviroment
     environment: 
       name: production
@@ -356,6 +359,7 @@ jobs:
 
   prod-integration-testing:
     name: prod Integration Testing
+    if: github.ref == 'ref/heads/main'
     needs: production-deploy
     runs-on: ubuntu-latest
     steps:
