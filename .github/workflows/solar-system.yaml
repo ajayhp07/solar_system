@@ -208,8 +208,8 @@ jobs:
     # Github enviroment
     environment: 
       name: development
-      url: solar-system-${{ vars.NAMESPACE }}.${{ secrets.INGRESS_IP }}.nip.io
-      
+      url: solar-system-${{ vars.NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io
+
     runs-on: ubuntu-latest
     steps:
     - name: checkout Repository
@@ -233,7 +233,7 @@ jobs:
     # Replace placeholder
     - name: Save Ingress Controller IP as a GITHUB Environment Variable
       run: |
-        echo "INGRESS_IP=${{ secrets.INGRESS_IP }}" >> $GITHUB_ENV
+        echo "INGRESS_IP=${{ vars.INGRESS_IP }}" >> $GITHUB_ENV
 
     - name: Replace Placeholders / Tokens
       uses: cschleiden/replace-tokens@v1
@@ -280,7 +280,7 @@ jobs:
     steps:
       - name: Test URL Output using CURL and JQ
         run: |
-          URL="solar-system-${{ vars.NAMESPACE }}.${{ secrets.INGRESS_IP }}.nip.io"
+          URL="solar-system-${{ vars.NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
           echo "Testing URL: $URL"
           echo "-----------------------------------"
           curl -s http://$URL/live | jq -r .status | grep -i live
