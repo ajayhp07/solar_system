@@ -357,6 +357,7 @@ jobs:
     steps:
       - name: Test URL Output using CURL and JQ
         run: |
+          sleep 20
           URL="solar-system-${{ vars.PROD_NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
           echo "Testing URL: $URL"
           echo "-----------------------------------"
