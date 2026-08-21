@@ -295,7 +295,7 @@ jobs:
     #     echo "APP_INGRESS_HOST=$HOST" >> $GITHUB_ENV
     #     echo "app_host=$HOST" >> $GITHUB_OUTPUT
 
-  # prod-integration-testing:
+  prod-integration-testing:
     name: prod Integration Testing
     if: github.ref == 'refs/heads/main'
     needs: production-deploy
