@@ -290,7 +290,7 @@ jobs:
     # Github enviroment
     environment: 
       name: production
-      url: solar-system-${{ vars.NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io
+      url: solar-system-${{ vars.PROD_NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io
     runs-on: ubuntu-latest
     steps:
      - name: checkout Repository
@@ -321,7 +321,7 @@ jobs:
          tokenSuffix: '}'
          files: '["kubernetes/production/*.yaml"]'
        env:
-        NAMESPACE: ${{vars.NAMESPACE}}
+        NAMESPACE: ${{vars.PROD_NAMESPACE}}
         K8S_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
         REPLICAS: ${{vars.REPLICAS}}
         INGRESS_IP: ${{env.INGRESS_IP}}
@@ -331,8 +331,8 @@ jobs:
          cat kubernetes/production/*.yaml
      - name: Create MongoDB Secret
        run: |
-        kubectl create namespace ${{ vars.NAMESPACE}} --dry-run=client -o yaml | kubectl apply -f -
-        kubectl -n ${{ vars.NAMESPACE}} create secret generic mongo-db-creds \
+        kubectl create namespace ${{ vars.PROD_NAMESPACE}} --dry-run=client -o yaml | kubectl apply -f -
+        kubectl -n ${{ vars.PROD_NAMESPACE}} create secret generic mongo-db-creds \
           --from-literal=MONGO_URI='${{ env.MONGO_URI }}' \
           --from-literal=MONGO_USERNAME='${{ vars.MONGO_USERNAME }}' \
           --from-literal=MONGO_PASSWORD='${{ secrets.MONGO_PASSWORD }}' \
@@ -346,7 +346,7 @@ jobs:
      - name: Set App Ingress Host URL
        id: set-ingress-host
        run: |
-        HOST=$(kubectl -n ${{ vars.NAMESPACE }} get ingress solar-system -o jsonpath="{.spec.rules[0].host}")
+        HOST=$(kubectl -n ${{ vars.PROD_NAMESPACE }} get ingress solar-system -o jsonpath="{.spec.rules[0].host}")
         echo "APP_INGRESS_HOST=$HOST" >> $GITHUB_ENV
         echo "app_host=$HOST" >> $GITHUB_OUTPUT
 
@@ -357,7 +357,7 @@ jobs:
     steps:
       - name: Test URL Output using CURL and JQ
         run: |
-          URL="solar-system-${{ vars.NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
+          URL="solar-system-${{ vars.PROD_NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
           echo "Testing URL: $URL"
           echo "-----------------------------------"
           curl -s http://$URL/live | jq -r .status | grep -i live      
