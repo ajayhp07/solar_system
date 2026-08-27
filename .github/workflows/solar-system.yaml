@@ -121,6 +121,7 @@ jobs:
         retention-days: 5
 
   reports-s3:
+    name: Aws s3 Upload Artifact
     needs: [testing, code-coverage]
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -133,6 +134,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Code-Coverage-Result
+
       - name: Merge Test file
         run: |
           ls -ltr
@@ -140,6 +142,16 @@ jobs:
           mv cobertura-coverage.xml test-results.xml reports-${{ github.sha }}/
           ls -ltr reports-${{ github.sha }}
 
+      - name: upload artifact to s3 
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: solar-system-artifact 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2'   # optional: defaults to us-east-1
+          SOURCE_DIR: 'reports-${{ github.sha }}'
 
   docker:
     name: Containeraize  
