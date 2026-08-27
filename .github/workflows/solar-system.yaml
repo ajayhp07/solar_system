@@ -222,11 +222,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test URL Output using CURL and JQ
+        env:
+          URL: ${{ needs.dev-deploy.outputs.APP_INGRESS_URL }}
         run: |
-          URL="solar-system-${{ vars.NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
           echo "Testing URL: $URL"
-          echo "-----------------------------------"
-          curl -s http://$URL/live | jq -r .status | grep -i live
+          echo "------------------------"
+          curl -s -k https://$URL/live | jq -r .status | grep -i liveURL and JQ
+
+      #   run: |
+      #     URL="solar-system-${{ vars.NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
+      #     echo "Testing URL: $URL"
+      #     echo "-----------------------------------"
+      #     curl -s http://$URL/live | jq -r .status | grep -i live
 
   production-deploy:
     if: github.ref == 'refs/heads/main'
@@ -308,12 +315,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Test URL Output using CURL and JQ
+        env:
+          URL: ${{ needs.production-deploy.outputs.APP_INGRESS_URL }}
         run: |
-          sleep 20
-          URL="solar-system-${{ vars.PROD_NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
           echo "Testing URL: $URL"
-          echo "-----------------------------------"
-          curl -s http://$URL/live | jq -r .status | grep -i live      
+          echo "------------------------"
+          curl -s -k https://$URL/live | jq -r .status | grep -i live   
     
 
 
