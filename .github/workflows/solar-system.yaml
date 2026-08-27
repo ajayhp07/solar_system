@@ -20,7 +20,6 @@ env:
 jobs:
   testing:
     name: unit testing
-
   # Adding service conatainer so that all tested happen in that db container instead of production database
     services:
       mongodb:
@@ -120,6 +119,28 @@ jobs:
         name: Code-Coverage-Result
         path: coverage
         retention-days: 5
+
+  reports-s3:
+    needs: [testing, code-coverage]
+    runs-on: ubuntu:latest
+    continue-on-error: true
+    steps:
+      - name: Download Mocha artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: Mocha-Test-Result
+      - name: Download Codecoverage Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: Code-Coverage-Result
+      - name: Merge Test file
+        run: |
+          ls -ltr
+          mkdir reports-${{github.sha}}
+          mv cobertura-coverage.xml reports-${{github.sha}} /
+          mv test-results.xml reports-${{github.sha}} /
+          ls -ltr reports-${{github.sha}}
+
 
 
   docker:
