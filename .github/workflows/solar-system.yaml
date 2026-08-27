@@ -136,11 +136,9 @@ jobs:
       - name: Merge Test file
         run: |
           ls -ltr
-          mkdir reports-${{github.sha}}
-          mv cobertura-coverage.xml reports-${{github.sha}} /
-          mv test-results.xml reports-${{github.sha}} /
-          ls -ltr reports-${{github.sha}}
-
+          mkdir -p reports-${{ github.sha }}
+          mv cobertura-coverage.xml test-results.xml reports-${{ github.sha }}/
+          ls -ltr reports-${{ github.sha }}
 
 
   docker:
