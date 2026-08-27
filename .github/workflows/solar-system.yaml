@@ -10,7 +10,7 @@ on:
       - 'feature/*'
 
 env:
-  MONGO_URI : ${{secrets.MONGO_URI}}
+  MONGO_URI : ${{vars.MONGO_URL}}
   MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
   MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
   DOCKERHUB_USERNAME: ${{vars.DOCKERHUB_USERNAME}}
@@ -208,8 +208,11 @@ jobs:
     needs: docker
     uses: ./.github/workflows/reuse-deployment.yaml
     secrets:
-      mongo-uri: ${{secrets.MONGO_URI}}
       mongodb:  ${{secrets.MONGO_PASSWORD}}
+    with:
+      mongodb-url: ${{ vars.MONGO_URL}}
+      environments: development
+      k8s-manifest-dir: kubernetes/development/
     #Agr hum reusable workflows krte h toh iss solar-system ko hum Caller bolte h aur reusable file ko Called.
     
   integration-testing:
@@ -230,8 +233,11 @@ jobs:
     needs: docker
     uses: ./.github/workflows/reuse-deployment.yaml
     secrets:
-      mongo-uri: ${{secrets.MONGO_URI}}
       mongodb:  ${{secrets.MONGO_PASSWORD}}
+    with:
+      mongodb-url: ${{ vars.MONGO_URL}}
+      environments: production
+      k8s-manifest-dir: kubernetes/production/
     # Github enviroment
     # environment: 
     #   name: production
