@@ -83,15 +83,13 @@ jobs:
 
       - name: Create MongoDB Secret
         run: |
-          kubectl create namespace ${{ vars.NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+          kubectl create namespace ${{ vars.NAMESPACE }} || true
+          kubectl -n ${{ vars.NAMESPACE }} delete secret mongo-db-creds --ignore-not-found
           kubectl -n ${{ vars.NAMESPACE }} create secret generic mongo-db-creds \
             --from-literal=MONGO_URI='${{ inputs.mongodb-url }}' \
             --from-literal=MONGO_USERNAME='${{ vars.MONGO_USERNAME }}' \
-            --from-literal=MONGO_PASSWORD='${{ secrets.mongodb }}' \
-            --save-config \
-            --dry-run=client \
-            -o yaml | kubectl apply -f -
-
+            --from-literal=MONGO_PASSWORD='${{ secrets.mongodb }}'
+            
       - name: deploy in dev
         run: |
           kubectl apply -f ${{inputs.k8s-manifest-dir}}
