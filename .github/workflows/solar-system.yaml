@@ -343,7 +343,7 @@ jobs:
     steps:
       - name: Test URL Output using CURL and JQ
         run: |
-          URL="solar-system-${{ vars.NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
+          URL="solar-system-${{ vars.PROD_NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
           echo "Testing URL: $URL"
           echo "-----------------------------------"
           curl -s http://$URL/live | jq -r .status | grep -i live
