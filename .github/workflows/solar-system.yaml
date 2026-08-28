@@ -347,6 +347,25 @@ jobs:
           echo "-----------------------------------"
           curl -s http://$URL/live | jq -r .status | grep -i live
 
-
+  slack-notification:
+    if: always()
+    name: Slack Notification
+    needs: [integration-testing, prod-integration-testing]
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack Notification
+        uses: drilonrecica/action-slack-notify@0.0.3
+        env:
+          SLACK_CHANNEL: github_action
+          SLACK_TITLE: "Solar-system-workflow"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK}}
+          SLACK_MESSAGE: |
+            Workflow: ${{ github.workflow }}
+            Job: ${{ github.job }}
+            Status: ${{ job.status }}
+            Commit: ${{ github.sha }}
+            Branch: ${{ github.ref_name }}
+            Repository: ${{ github.repository }}
 
     
