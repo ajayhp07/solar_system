@@ -48,15 +48,10 @@ jobs:
       with:
         node-version: ${{matrix.versions}}
     
-    - name: Cache npm dependences
-      uses: actions/cache@v4
+    - name: Composite Action for NPM
+      uses: ./.github/workflows/custom-action/npm action
       with:
         path: node_modules
-        key: ${{runner.os}}-node_modules-${{ hashFiles('package-lock.json') }}
-      
-
-    - name: Install Dependencies
-      run: npm install
     
     - name: Unit test
       id: nodejs-test
@@ -95,19 +90,23 @@ jobs:
     - name: checkout Repository
       uses: actions/checkout@v4
 
+    - name: Composite Action for NPM
+      uses: ./.github/workflows/custom-action/npm action
+      with:
+        path: node_modules
     # - name: Nodejs setup
     #   uses: actions/setup-node@v4
     #   with:
     #     node-version: 18
 
-    - name: Cache npm dependences
-      uses: actions/cache@v4
-      with:
-        path: node_modules
-        key: ${{runner.os}}-node_modules-${{ hashFiles('package-lock.json') }}
+    # - name: Cache npm dependences
+    #   uses: actions/cache@v4
+    #   with:
+    #     path: node_modules
+    #     key: ${{runner.os}}-node_modules-${{ hashFiles('package-lock.json') }}
     
-    - name: Install Dependencies
-      run: npm install
+    # - name: Install Dependencies
+    #   run: npm install
     
     - name: Check run coverage
       continue-on-error: true
@@ -254,10 +253,21 @@ jobs:
     steps:
       - name: Test URL Output using CURL and JQ
         run: |
-          URL="solar-system-${{ vars.NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
+          IP="${{ vars.INGRESS_IP }}"
+          URL="solar-system-${{ vars.PROD_NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
           echo "Testing URL: $URL"
           echo "-----------------------------------"
-          curl -s http://$URL/live | jq -r .status | grep -i live
+          # curl -s http://$URL/live | jq -r .status | grep -i live
+          STATUS=$(curl -s --max-time 10 -H "Host: $URL" "http://$IP/live" | jq -r .status || true)
+          
+          echo "Received Status: $STATUS"
+          if [[ "$STATUS" == *"live"* ]]; then
+            echo "Test Passed!"
+            exit 0
+          else
+            echo "Test Failed: Expected 'live' but got '$STATUS'"
+            exit 1
+          fi
 
         
 
@@ -343,10 +353,21 @@ jobs:
     steps:
       - name: Test URL Output using CURL and JQ
         run: |
+          IP="${{ vars.INGRESS_IP }}"
           URL="solar-system-${{ vars.PROD_NAMESPACE }}.${{ vars.INGRESS_IP }}.nip.io"
           echo "Testing URL: $URL"
           echo "-----------------------------------"
-          curl -s http://$URL/live | jq -r .status | grep -i live
+          # curl -s http://$URL/live | jq -r .status | grep -i live
+          STATUS=$(curl -s --max-time 10 -H "Host: $URL" "http://$IP/live" | jq -r .status || true)
+          
+          echo "Received Status: $STATUS"
+          if [[ "$STATUS" == *"live"* ]]; then
+            echo "Test Passed!"
+            exit 0
+          else
+            echo "Test Failed: Expected 'live' but got '$STATUS'"
+            exit 1
+          fi
 
   slack-notification:
     if: always()
