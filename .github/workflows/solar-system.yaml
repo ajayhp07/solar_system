@@ -337,7 +337,7 @@ jobs:
 
   prod-integration-testing:
     name: prod Integration Testing
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     needs: production-deploy
     runs-on: ubuntu-latest
     steps:
