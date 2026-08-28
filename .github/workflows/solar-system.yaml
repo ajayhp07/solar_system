@@ -355,7 +355,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send Slack Notification
-        uses: drilonrecica/action-slack-notify@0.0.3
+        uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: github_action
           SLACK_TITLE: "Solar-system-workflow"
