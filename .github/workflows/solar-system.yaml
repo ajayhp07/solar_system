@@ -262,7 +262,8 @@ jobs:
         
 
   production-deploy:
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/feature/exploring-workflow'
     needs: docker
     uses: ./.github/workflows/reuse-deployment.yaml
     secrets:
